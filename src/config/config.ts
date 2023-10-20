@@ -8,7 +8,7 @@ const MONGO_PORT = process.env.MONGO_PORT;
 const MONGO_HOST = process.env.MONGO_HOST;
 const MONGO_URL = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/`;
 
-console.log(MONGO_URL);
+// console.log(MONGO_URL);
 
 
 const SERVER_PORT = process.env.HOST ? Number(process.env.MONGO_HOST) : 3001;

@@ -6,10 +6,15 @@ export interface IHistory{
     date: string
 }
 
+export interface ISpentCC{
+    solutionName: string,
+    cc: number
+}
 export interface IUser{
     email: string,
     cc: number,
-    history: IHistory[]
+    history: IHistory[],
+    spentCC: ISpentCC[]
 
 }
 const NgoSchema: Schema = new Schema<IUser>(
@@ -20,7 +25,13 @@ const NgoSchema: Schema = new Schema<IUser>(
             linkedApp: {type: Schema.Types.ObjectId, required: true, ref: 'LinkedApp'},
             cc: {type: Number, required: true},
             date: {type: String, required: true}
-        }]
+        }],
+        spentCC: [
+            {
+                solutionName: {type: String, require: true},
+                cc: {type: Number, require: true}
+            }
+        ]
     },
     {
         versionKey: false

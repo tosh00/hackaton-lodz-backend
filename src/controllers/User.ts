@@ -119,6 +119,39 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const spendCC = async (req: Request, res: Response, next: NextFunction) => {
+    const solutionName = req.body.solutionName;
+
+    try {
+        const newUser = await manager.spendCC(req.body.user.email, solutionName)
+        res.status(200).json(newUser);
+    } catch (err) {
+        if (err instanceof AppError) {
+            return res.status(err.status).json(err.message)
+        } else {
+            return res.status(400).json("Unhandled error")
+        }
+    }
+
+};
+
+const CCBySolution = async (req: Request, res: Response, next: NextFunction) => {
+    const solutionName = req.query.solutionName;
+
+    console.log(solutionName);
+    
+    try {
+        const sum = await manager.CCBySolution(req.body.user.email, solutionName as string)
+        res.status(200).json({solutionName, cc: sum});
+    } catch (err) {
+        if (err instanceof AppError) {
+            return res.status(err.status).json(err.message)
+        } else {
+            return res.status(400).json("Unhandled error")
+        }
+    }
+
+};
 
 
-export default { createUser, readUser, readAll, updateUser, deleteUser, readUserCC, readUsersHistory }
+export default { createUser, readUser, readAll, updateUser, deleteUser, readUserCC, readUsersHistory, spendCC, CCBySolution}

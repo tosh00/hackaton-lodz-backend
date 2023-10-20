@@ -14,8 +14,6 @@ async function validateAssertion(assertion: any, oAuth2Client: OAuth2Client) {
   // Check that the assertion's audience matches ours
   // const aud = await audience();
   const aud = '168441896086-1u2jequdkfnffl9htp2ev5j3h29b1h4s.apps.googleusercontent.com';
-  console.log(aud);
-
 
   // Fetch the current certificates and verify the signature on the assertion
   const response = await oAuth2Client.getIapPublicKeys();
@@ -48,14 +46,11 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
     const info = await validateAssertion(assertion, oAuth2Client);
     if (info && info.email) {
 
-      if(await userManager.checkIfUserExist(info.email)){
-        req.body.user = info;
-        next();
-      }else{
-        await userManager.createUser({email: info.email, cc: 0, history: []})
-        req.body.user = info;
-        next();
+      if(!(await userManager.checkIfUserExist(info.email))){
+        await userManager.createUser({email: info.email, cc: 0, history: [], spentCC: []})
       }
+      req.body.user = info;
+      next();
     } else {
       res.status(401).send();
     }

@@ -4,7 +4,9 @@ import userAuthenticate from '../library/Authentication';
 
 const router = express.Router();
 
-router.get('/cc', userAuthenticate, controller.readUserCC);
-router.get('/history', controller.readAll);
+router.get('/history', userAuthenticate, controller.readAll);
+router.get('/solution', userAuthenticate,  controller.CCBySolution);
+router.get('/cc', userAuthenticate,  controller.readUserCC);
+router.post('/cc', userAuthenticate, controller.spendCC);
 
 export = router;

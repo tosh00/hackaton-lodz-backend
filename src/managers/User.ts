@@ -84,6 +84,58 @@ const checkIfUserExist = async (email: string) => {
 const readAll = async () => {
     return await User.find();
 };
+
+const spendCC = async (email: string, solutionName: string) => {
+    const user = await User.findOne({ email });
+    try{
+
+        if(!solutionName){
+            throw new AppError(400, 'Please provide solution name')
+        }
+
+        if(user){
+
+            if(user.cc <= 0){
+                throw new AppError(400, 'You don\'t have any CC to spend')
+            }
+
+            user.spentCC.push({
+                solutionName: solutionName,
+                cc: user.cc
+            })
+            user.cc = 0;
+            user.save()
+        }else{
+            throw new AppError(500, 'Internal server error')
+        }
+    }catch(err){
+        if(err instanceof AppError){
+            throw err;
+        }else{
+            throw new AppError(500, 'Internal server error2')
+        }
+    }
+}
+
+const CCBySolution = async (email: string, solutionName: string) => {
+    const user = await User.findOne({ email });
+    try{
+        if(user){
+            return user.spentCC.reduce((accumulator, currentValue) => {
+                if(currentValue.solutionName === solutionName){
+                    return accumulator+=currentValue.cc;
+                } else{
+                    return accumulator;
+                }
+            }, 0)
+        }else{
+            throw new AppError(500, 'Internal server error')
+        }
+    }catch(err){
+        throw new AppError(500, 'Internal server error')
+    }
+}
+
 export default {
     createUser,
     readUser,
@@ -92,5 +144,7 @@ export default {
     deleteUser,
     readUsersCC,
     readUsersHistory,
-    checkIfUserExist
+    checkIfUserExist,
+    spendCC,
+    CCBySolution
 };
