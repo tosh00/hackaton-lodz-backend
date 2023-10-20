@@ -47,34 +47,38 @@ const deleteUser = async (id: mongoose.Types.ObjectId) => {
 
 
 const readUser = async (id: mongoose.Types.ObjectId) => {
-    
+
     const user = await User.findById(id);
-    
-    if(user != null){
+
+    if (user != null) {
         return user;
-    }else{
+    } else {
         throw new AppError(404, 'User not found');
     }
 };
 
-const readUsersCC = async (id: mongoose.Types.ObjectId ) => {
-    const user = await User.findById(id);
-    
-    if(user != null){
+const readUsersCC = async (email: string) => {
+    const user = await User.findOne({ email });
+
+    if (user != null) {
         return user.cc;
-    }else{
+    } else {
         throw new AppError(404, 'User not found');
     }
 }
 
-const readUsersHistory = async (id: mongoose.Types.ObjectId ) => {
-    const user = await User.findById(id);
-    
-    if(user != null){
+const readUsersHistory = async (email: string) => {
+    const user = await User.findOne({ email });
+
+    if (user != null) {
         return user.history;
-    }else{
+    } else {
         throw new AppError(404, 'User not found');
     }
+}
+
+const checkIfUserExist = async (email: string) => {
+    return !!(await User.findOne({ email }));
 }
 
 const readAll = async () => {
@@ -87,5 +91,6 @@ export default {
     updateUser,
     deleteUser,
     readUsersCC,
-    readUsersHistory
+    readUsersHistory,
+    checkIfUserExist
 };

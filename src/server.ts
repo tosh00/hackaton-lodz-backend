@@ -5,6 +5,7 @@ import { config } from "./config/config";
 import Logging from "./library/Logging";
 import itemRoutes from './routes/Item'
 import linkedAppRoutes from './routes/LinkedApp'
+import userRoutes from './routes/User'
 
 const router = express();
 
@@ -49,6 +50,7 @@ const StartServer = () => {
     // Routes
 
     router.use('/api/item', itemRoutes);
+    router.use('/api/self', userRoutes);
     router.use('/api/linkedApp', linkedAppRoutes);
 
     // Health check

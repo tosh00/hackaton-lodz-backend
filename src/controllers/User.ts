@@ -37,8 +37,10 @@ const readUser = async (req: Request, res: Response, next: NextFunction) => {
 const readUserCC = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
-        const userId = new mongoose.Types.ObjectId(req.params.id);
-        const user = await manager.readUsersCC(userId)
+        // const userId = new mongoose.Types.ObjectId(req.params.id);
+        const userEmail = req.body.user.email;
+
+        const user = await manager.readUsersCC(userEmail)
         return res.status(200).json(user);
 
     }
@@ -55,8 +57,8 @@ const readUserCC = async (req: Request, res: Response, next: NextFunction) => {
 const readUsersHistory = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
-        const userId = new mongoose.Types.ObjectId(req.params.id);
-        const user = await manager.readUsersHistory(userId)
+        const userEmail = req.body.user.email;
+        const user = await manager.readUsersHistory(userEmail)
         return res.status(200).json(user);
 
     }

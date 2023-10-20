@@ -1,12 +1,10 @@
 import express from 'express';
-import controller from '../controllers/Item'
+import controller from '../controllers/User'
+import userAuthenticate from '../library/Authentication';
 
 const router = express.Router();
 
-router.post('/', controller.createItem);
-router.get('/:id', controller.readItem);
-router.get('/', controller.readAll);
-router.put('/:id', controller.updateItem)
-router.delete('/:id', controller.deleteItem)
+router.get('/cc', userAuthenticate, controller.readUserCC);
+router.get('/history', controller.readAll);
 
 export = router;
