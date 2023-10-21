@@ -48,7 +48,7 @@ const deleteLinkedApp = async (id: mongoose.Types.ObjectId) => {
 
 const readLinkedApp = async (id: mongoose.Types.ObjectId) => {
 
-    const linkedApp = await LinkedApp.findById(id);
+    const linkedApp = await LinkedApp.findById(id).select('-apiKey');
 
     if (linkedApp != null) {
         return linkedApp;
@@ -70,7 +70,7 @@ const readLinkedAppByApiKey = async (apiKey: string) => {
 
 
 const readAll = async () => {
-    return await LinkedApp.find();
+    return await LinkedApp.find().select('-apiKey');
 };
 
 export default {

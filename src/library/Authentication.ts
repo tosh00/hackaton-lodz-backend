@@ -35,10 +35,10 @@ async function validateAssertion(assertion: any, oAuth2Client: OAuth2Client) {
 
 const userAuthenticate = async (req: Request, res: Response, next: NextFunction) => {
   const oAuth2Client = new OAuth2Client();
-  const assertion = req.header('token');
+  // const assertion = req.header('token');
 
-
-
+  const assertion = req.headers.cookie?.split('; ').filter(cookie => cookie.split('=')[0] === 'token')[0].split('=')[1];
+  
   if (!assertion) {
     res.status(401).send();
   }
