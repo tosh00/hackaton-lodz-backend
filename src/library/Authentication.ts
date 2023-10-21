@@ -2,6 +2,7 @@ import { OAuth2Client, TokenPayload } from "google-auth-library"
 import { Request, Response, NextFunction } from "express";
 import User from "../model/User"
 import userManager from "../managers/User"
+import linkedAppManager from "../managers/LinkedApp"
 import dotenv from 'dotenv'
 
 dotenv.config();
@@ -36,7 +37,7 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
   const oAuth2Client = new OAuth2Client();
   const assertion = req.header('session-token');
 
-  
+
 
   if (!assertion) {
     res.status(401).send();
@@ -46,8 +47,8 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
     const info = await validateAssertion(assertion, oAuth2Client);
     if (info && info.email) {
 
-      if(!(await userManager.checkIfUserExist(info.email))){
-        await userManager.createUser({email: info.email, cc: 0, history: [], spentCC: []})
+      if (!(await userManager.checkIfUserExist(info.email))) {
+        await userManager.createUser({ email: info.email, cc: 0, history: [], spentCC: [] })
       }
       req.body.user = info;
       next();
@@ -57,9 +58,23 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
   } catch (err) {
     res.status(401).send(err);
   }
+}
 
+const apiAuthenticate = async (req: Request, res: Response, next: NextFunction) => {
+  const apiKey = req.headers.apikey;
+  try{
+    if(!apiKey || Array.isArray(apiKey)){
+      return res.status(400).send();
+    }
+    const linkedApp = await linkedAppManager.readLinkedAppByApiKey(apiKey);
+    
+    req.body.app = linkedApp
+    next();
+  }catch(err){
+    res.status(400).send();
+  }
 
 }
 
 
-export default userAuthenticate 
+export  {userAuthenticate, apiAuthenticate} 

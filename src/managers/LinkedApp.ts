@@ -47,15 +47,27 @@ const deleteLinkedApp = async (id: mongoose.Types.ObjectId) => {
 
 
 const readLinkedApp = async (id: mongoose.Types.ObjectId) => {
-    
+
     const linkedApp = await LinkedApp.findById(id);
-    
-    if(linkedApp != null){
+
+    if (linkedApp != null) {
         return linkedApp;
-    }else{
+    } else {
         throw new AppError(404, 'LinkedApp not found');
     }
 };
+
+const readLinkedAppByApiKey = async (apiKey: string) => {
+    
+    const linkedApp = await LinkedApp.findOne({ apiKey });
+    
+    if (linkedApp != null) {
+        return linkedApp;
+    } else {
+        throw new AppError(404, 'LinkedApp not found');
+    }
+};
+
 
 const readAll = async () => {
     return await LinkedApp.find();
@@ -66,5 +78,6 @@ export default {
     readLinkedApp,
     readAll,
     updateLinkedApp,
-    deleteLinkedApp
+    deleteLinkedApp,
+    readLinkedAppByApiKey
 };

@@ -6,6 +6,7 @@ import Logging from "./library/Logging";
 import itemRoutes from './routes/Item'
 import linkedAppRoutes from './routes/LinkedApp'
 import userRoutes from './routes/User'
+import externalRoutes from './routes/externalApi'
 
 const router = express();
 
@@ -52,6 +53,7 @@ const StartServer = () => {
     router.use('/api/item', itemRoutes);
     router.use('/api/self', userRoutes);
     router.use('/api/linkedApp', linkedAppRoutes);
+    router.use('/api2/', externalRoutes);
 
     // Health check
 

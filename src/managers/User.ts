@@ -68,7 +68,15 @@ const readUsersCC = async (email: string) => {
 }
 
 const readUsersHistory = async (email: string) => {
-    const user = await User.findOne({ email });
+    console.log('test');
+    const user = await User.findOne({ email }).populate({ 
+        path: 'history',
+        populate: {
+          path: 'linkedApp',
+          model: 'LinkedApp'
+        } 
+     });
+    
 
     if (user != null) {
         return user.history;
@@ -85,17 +93,52 @@ const readAll = async () => {
     return await User.find();
 };
 
+const addCCToUser = async (email: string, cc: number, linkedApp: mongoose.Types.ObjectId) => {
+    
+    const user = await User.findOne({ email });
+    console.log(email);
+    
+    try {
+
+        if (!linkedApp) {
+            throw new AppError(403, 'Staph! You violated the law!')
+        }
+
+        if (user) {
+
+            const newHistoryReccord = {
+                linkedApp,
+                cc,
+                date: (new Date()).toString()
+            }
+
+            user.history.push(newHistoryReccord)
+            user.cc += cc;
+            user.save()
+            return newHistoryReccord;
+        } else {
+            throw new AppError(500, 'Internal server error')
+        }
+    } catch (err) {
+        if (err instanceof AppError) {
+            throw err;
+        } else {
+            throw new AppError(500, 'Internal server error2')
+        }
+    }
+}
+
 const spendCC = async (email: string, solutionName: string) => {
     const user = await User.findOne({ email });
-    try{
+    try {
 
-        if(!solutionName){
+        if (!solutionName) {
             throw new AppError(400, 'Please provide solution name')
         }
 
-        if(user){
+        if (user) {
 
-            if(user.cc <= 0){
+            if (user.cc <= 0) {
                 throw new AppError(400, 'You don\'t have any CC to spend')
             }
 
@@ -105,13 +148,13 @@ const spendCC = async (email: string, solutionName: string) => {
             })
             user.cc = 0;
             user.save()
-        }else{
+        } else {
             throw new AppError(500, 'Internal server error')
         }
-    }catch(err){
-        if(err instanceof AppError){
+    } catch (err) {
+        if (err instanceof AppError) {
             throw err;
-        }else{
+        } else {
             throw new AppError(500, 'Internal server error2')
         }
     }
@@ -119,19 +162,19 @@ const spendCC = async (email: string, solutionName: string) => {
 
 const CCBySolution = async (email: string, solutionName: string) => {
     const user = await User.findOne({ email });
-    try{
-        if(user){
+    try {
+        if (user) {
             return user.spentCC.reduce((accumulator, currentValue) => {
-                if(currentValue.solutionName === solutionName){
-                    return accumulator+=currentValue.cc;
-                } else{
+                if (currentValue.solutionName === solutionName) {
+                    return accumulator += currentValue.cc;
+                } else {
                     return accumulator;
                 }
             }, 0)
-        }else{
+        } else {
             throw new AppError(500, 'Internal server error')
         }
-    }catch(err){
+    } catch (err) {
         throw new AppError(500, 'Internal server error')
     }
 }
@@ -146,5 +189,6 @@ export default {
     readUsersHistory,
     checkIfUserExist,
     spendCC,
-    CCBySolution
+    CCBySolution,
+    addCCToUser
 };

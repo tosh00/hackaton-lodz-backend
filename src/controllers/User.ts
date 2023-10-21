@@ -58,7 +58,9 @@ const readUsersHistory = async (req: Request, res: Response, next: NextFunction)
     
     try {
         const userEmail = req.body.user.email;
+        console.log(userEmail);
         const user = await manager.readUsersHistory(userEmail)
+        
         return res.status(200).json(user);
 
     }
@@ -138,8 +140,6 @@ const spendCC = async (req: Request, res: Response, next: NextFunction) => {
 const CCBySolution = async (req: Request, res: Response, next: NextFunction) => {
     const solutionName = req.query.solutionName;
 
-    console.log(solutionName);
-    
     try {
         const sum = await manager.CCBySolution(req.body.user.email, solutionName as string)
         res.status(200).json({solutionName, cc: sum});
@@ -150,7 +150,6 @@ const CCBySolution = async (req: Request, res: Response, next: NextFunction) => 
             return res.status(400).json("Unhandled error")
         }
     }
-
 };
 
 

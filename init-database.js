@@ -1,7 +1,7 @@
 
-db.createCollection('linkedApps');
+db.createCollection('linkedapps');
 
-db.linkedApps.insertMany(
+db.linkedapps.insertMany(
     [
         {
             "name": "TreePlanter",
