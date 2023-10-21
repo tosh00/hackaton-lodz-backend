@@ -58,7 +58,6 @@ const readUsersHistory = async (req: Request, res: Response, next: NextFunction)
     
     try {
         const userEmail = req.body.user.email;
-        console.log(userEmail);
         const user = await manager.readUsersHistory(userEmail)
         
         return res.status(200).json(user);

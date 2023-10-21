@@ -73,13 +73,14 @@ const readUsersHistory = async (email: string) => {
         path: 'history',
         populate: {
           path: 'linkedApp',
-          model: 'LinkedApp'
+          model: 'LinkedApp',
+          select: '-apiKey'
         } 
      });
     
 
     if (user != null) {
-        return user.history;
+        return user;
     } else {
         throw new AppError(404, 'User not found');
     }
