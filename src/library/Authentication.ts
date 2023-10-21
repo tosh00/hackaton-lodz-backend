@@ -35,7 +35,7 @@ async function validateAssertion(assertion: any, oAuth2Client: OAuth2Client) {
 
 const userAuthenticate = async (req: Request, res: Response, next: NextFunction) => {
   const oAuth2Client = new OAuth2Client();
-  const assertion = req.header('session-token');
+  const assertion = req.header('token');
 
 
 
