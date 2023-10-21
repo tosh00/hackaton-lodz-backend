@@ -7,10 +7,10 @@ export default class Logging {
     // public static error = (args: any) => console.log(chalk.red(`[${new Date().toLocaleString()}] [ERROR]`), typeof args === 'string' ? chalk.redBright(args) : args);
     
     
-    public static log = (args: any) => {};
-    public static info = (args: any) => {};
-    public static warn = (args: any) => {};
-    public static error = (args: any) => {};
+    public static log = console.log;
+    public static info = console.debug;
+    public static warn = console.warn;
+    public static error = console.error;
 
 
 }

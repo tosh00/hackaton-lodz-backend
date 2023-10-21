@@ -11,8 +11,12 @@ import externalRoutes from './routes/externalApi'
 const router = express();
 
 
+Logging.info("Connecting to database...")
+Logging.warn(config.mongo.url)
 
-mongoose.connect(config.mongo.url).then(() => {
+try{
+    mongoose.connect(config.mongo.url).then(() => {
+
     Logging.info("Connected")
     StartServer();
 }).catch((e) => {
@@ -20,6 +24,10 @@ mongoose.connect(config.mongo.url).then(() => {
     Logging.error(e)
 
 })
+}catch(err){
+    Logging.error(err)
+}
+
 
 const StartServer = () => {
     
