@@ -8,7 +8,7 @@ const MONGO_HOST = process.env.MONGO_HOST || 'cluster0.vuikinr'
 const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.vuikinr.mongodb.net/?retryWrites=true&w=majority`;
 
 
-const SERVER_PORT = process.env.APP_PORT ? Number(process.env.APP_PORT) : 3001;
+const SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 
 export const config = {
