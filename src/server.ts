@@ -14,9 +14,7 @@ const router = express();
 Logging.info("Connecting to database...")
 Logging.warn(config.mongo.url)
 
-try{
-    mongoose.connect(config.mongo.url).then(() => {
-
+mongoose.connect(config.mongo.url).then(() => {
     Logging.info("Connected")
     StartServer();
 }).catch((e) => {
@@ -24,9 +22,6 @@ try{
     Logging.error(e)
 
 })
-}catch(err){
-    Logging.error(err)
-}
 
 
 const StartServer = () => {
@@ -46,7 +41,7 @@ const StartServer = () => {
     // Rules of our API 
     router.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-api-key');
 
         if (req.method == 'OPTIONS') {
             res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');

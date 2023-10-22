@@ -37,14 +37,22 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
   const oAuth2Client = new OAuth2Client();
   // const assertion = req.header('token');
 
-  const assertion = req.headers.cookie?.split('; ').filter(cookie => cookie.split('=')[0] === 'token')[0].split('=')[1];
-  
-  if (!assertion) {
-    res.status(401).send();
+  // const assertion = req.headers.cookie?.split('; ').filter(cookie => cookie.split('=')[0] === 'token')[0]?.split('=')[1];
+
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: 'No credentials sent!' });
   }
 
+  const assertion = token.split(' ')[1];
+
+  if (!assertion) {
+    return res.status(401).json({ error: 'No credentials sent!' });
+  }
   try {
     const info = await validateAssertion(assertion, oAuth2Client);
+
     if (info && info.email) {
 
       if (!(await userManager.checkIfUserExist(info.email))) {
@@ -61,7 +69,7 @@ const userAuthenticate = async (req: Request, res: Response, next: NextFunction)
 }
 
 const apiAuthenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const apiKey = req.headers.apikey;
+  const apiKey = req.headers['x-api-key'];
   try{
     if(!apiKey || Array.isArray(apiKey)){
       return res.status(400).send();
